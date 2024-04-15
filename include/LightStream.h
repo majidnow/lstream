@@ -4,6 +4,15 @@
 #include <memory>
 #include "logger.h"
 
+#define MCU		1
+
+#ifdef UPDATE_FIRMWARE
+#undef UPDATE_FIRMWARE
+#endif
+#ifdef FILE_ERROR
+#undef FILE_ERROR
+#endif
+
 #define START_BYTE_CAT  0x41
 #define START_BYTE_DOG  0x24
 

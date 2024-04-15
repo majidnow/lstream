@@ -1,6 +1,10 @@
 #include "LightStream.h"
 #include "crc.h"
 
+#ifdef MCU
+#include "string.h"
+#endif
+
 #define BUFFER_SIZE		(1024 * 1)
 
 #define FRAME_STEP_CAT      ((uint8_t)0)
