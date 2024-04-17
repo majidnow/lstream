@@ -161,13 +161,13 @@ public:
 	uint8_t* Buffer();
 	size_t Size();
 	void Check(size_t);
-	void Reset();
 	void InitFrame();
 	void FrameHeader(FrameType, size_t);
 	void PushDataToFrame(uint8_t*,size_t);
 	LSBuff* Frame();
 
 private:
+	void Reset();
     std::shared_ptr<IFrame> upper;
 	SFrame frame;
 	uint8_t* rbuffer;
