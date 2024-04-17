@@ -3,8 +3,7 @@
 #include <cstdint>
 #include <memory>
 #include "logger.h"
-
-#define MCU		1
+#include "ls_config.h"
 
 #ifdef UPDATE_FIRMWARE
 #undef UPDATE_FIRMWARE
@@ -115,6 +114,8 @@ class LSBuff
     friend class LightStream;
 public:
     LSBuff(size_t size)
+		:
+		position(0)
     {
     	ptr = new uint8_t[size];
     }
@@ -144,8 +145,8 @@ public:
     FrameType type;
     FrameStatus status;
 private:
-    uint8_t step, msg_type, nread;
-    uint16_t msg_len, first_piece_len;
+    uint8_t step, msg_type;
+    uint16_t msg_len, first_piece_len, nread;
 };
 
 class IFrame
