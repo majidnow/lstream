@@ -14,6 +14,9 @@
 #define M_TYPE_BC		((uint8_t)0x04)
 #define M_TYPE_ST		((uint8_t)0x08)
 
+typedef struct {
+	uint8_t connected;
+}status_t;
 
 
 #endif /* LSTREAM_INCLUDE_LSTYPE_H_ */
