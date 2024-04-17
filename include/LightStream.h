@@ -144,7 +144,7 @@ public:
     FrameType type;
     FrameStatus status;
 private:
-    uint8_t step, ctrl_byte, msg_type, nread;
+    uint8_t step, msg_type, nread;
     uint16_t msg_len, first_piece_len;
 };
 

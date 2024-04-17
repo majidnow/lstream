@@ -3,6 +3,7 @@
 
 #ifdef MCU
 #include "string.h"
+#include "utils.h"
 #endif
 
 #define READ_BUFFER_SIZE	(1024 * 1)
@@ -23,8 +24,8 @@ LightStream::LightStream(std::shared_ptr<IFrame> upper)
     :
     upper(upper),
     frame(),
-	buffer(new uint8_t[BUFFER_SIZE]),
-	position(0)
+	rbuffer(new uint8_t[READ_BUFFER_SIZE]),
+	rposition(0),
 	wbuff(WRITE_BUFFER_SIZE)
 {
     Reset();
@@ -33,17 +34,17 @@ LightStream::LightStream(std::shared_ptr<IFrame> upper)
 
 uint8_t* LightStream::Buffer()
 {
-	return buffer + position;
+	return rbuffer + rposition;
 }
 
 size_t LightStream::Size()
 {
-	return BUFFER_SIZE - position;
+	return READ_BUFFER_SIZE - rposition;
 }
 
 void LightStream::Check(size_t nread)
 {
-    uint8_t *buff = buffer + position;
+    uint8_t *buff = rbuffer + rposition;
     int index = 0;
     while (nread > index)
     {
@@ -123,7 +124,7 @@ void LightStream::Check(size_t nread)
                 {
                     temp_buff = new uint8_t[frame.length + 5];
                     memcpy(temp_buff, frame.buffer, frame.first_piece_len);
-                    memcpy(temp_buff + frame.first_piece_len, buffer, frame.nread-frame.first_piece_len+3);
+                    memcpy(temp_buff + frame.first_piece_len, rbuffer, frame.nread-frame.first_piece_len+3);
                     crc = *((uint16_t*)(temp_buff+frame.length+3));
                 }
 
@@ -151,12 +152,12 @@ void LightStream::Check(size_t nread)
     }
 
     // reset buffer position
-    position += nread;
+    rposition += nread;
     // if circular buffer overflowed
-    if (position >= BUFFER_SIZE)
+    if (rposition >= READ_BUFFER_SIZE)
     {
         // the position need to set zero
-        position = 0;
+        rposition = 0;
         // seeking frame data body started the so data will be turned to pieces
         if (frame.step >= FRAME_STEP_TYPE)
             frame.first_piece_len = frame.nread+(frame.step-2);
