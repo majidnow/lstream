@@ -3,8 +3,7 @@
 #include <cstdint>
 #include <memory>
 #include "logger.h"
-
-#define MCU		1
+#include "ls_config.h"
 
 #ifdef UPDATE_FIRMWARE
 #undef UPDATE_FIRMWARE
