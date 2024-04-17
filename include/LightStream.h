@@ -114,6 +114,8 @@ class LSBuff
     friend class LightStream;
 public:
     LSBuff(size_t size)
+		:
+		position(0)
     {
     	ptr = new uint8_t[size];
     }
