@@ -5,7 +5,8 @@
 #include "string.h"
 #endif
 
-#define BUFFER_SIZE		(1024 * 1)
+#define READ_BUFFER_SIZE	(1024 * 1)
+#define WRITE_BUFFER_SIZE	(1024 * 4+7)
 
 #define FRAME_STEP_CAT      ((uint8_t)0)
 #define FRAME_STEP_DOG      ((uint8_t)1)
@@ -24,6 +25,7 @@ LightStream::LightStream(std::shared_ptr<IFrame> upper)
     frame(),
 	buffer(new uint8_t[BUFFER_SIZE]),
 	position(0)
+	wbuff(WRITE_BUFFER_SIZE)
 {
     Reset();
     //crcInit();
@@ -166,7 +168,35 @@ void LightStream::Reset()
     frame.nread = 0;
     frame.step = 0;
     frame.msg_len = 0;
-    frame.ctrl_byte = START_BYTE_CAT;
     frame.msg_type = 0;
     frame.first_piece_len = 0;
 }
+
+void LightStream::InitFrame()
+{
+	wbuff.ptr[0] = START_BYTE_CAT;
+	wbuff.ptr[1] = START_BYTE_DOG;
+	wbuff.position = 5;
+}
+
+void LightStream::FrameHeader(FrameType type, size_t dsize)
+{
+	wbuff.ptr[2] = (uint8_t)type;
+	memcpy(wbuff.ptr + 3, &dsize, 2);
+}
+
+void LightStream::PushDataToFrame(uint8_t* data, size_t size)
+{
+	memcpy(wbuff.End(), data, size);
+	wbuff.position += size;
+}
+
+LSBuff* LightStream::Frame()
+{
+	uint16_t crc = crcFast(wbuff.ptr + 2, wbuff.position-2);
+	memcpy(wbuff.End(), &crc, 2);
+	wbuff.position += 2;
+
+	return &wbuff;
+}
+

@@ -110,6 +110,31 @@ enum class FrameType :uint8_t
     PONG = 0x1F// we using 3 high-bits of type field to show protocol version so we can support 32 types
 };
 
+class LSBuff
+{
+    friend class LightStream;
+public:
+    LSBuff(size_t size)
+    {
+    	ptr = new uint8_t[size];
+    }
+	uint8_t *End()
+	{
+		return (ptr+position);
+	}
+	uint8_t *Buffer()
+	{
+		return ptr;
+	}
+	size_t Size()
+	{
+		return position;
+	}
+private:
+	uint8_t *ptr;
+	size_t position;
+};
+
 class SFrame
 {
     friend class LightStream;
@@ -137,11 +162,16 @@ public:
 	size_t Size();
 	void Check(size_t);
 	void Reset();
+	void InitFrame();
+	void FrameHeader(FrameType, size_t);
+	void PushDataToFrame(uint8_t*,size_t);
+	LSBuff* Frame();
 
 private:
     std::shared_ptr<IFrame> upper;
 	SFrame frame;
-	uint8_t* buffer;
-    int position;
+	uint8_t* rbuffer;
+    int rposition;
+    LSBuff wbuff;
 };
 
