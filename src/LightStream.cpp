@@ -11,14 +11,10 @@
 
 #define FRAME_STEP_CAT      ((uint8_t)0)
 #define FRAME_STEP_DOG      ((uint8_t)1)
-#define FRAME_STEP_TYPE     ((uint8_t)2)
-#define FRAME_STEP_LEN1     ((uint8_t)3)
-#define FRAME_STEP_LEN2     ((uint8_t)4)
+#define FRAME_STEP_LEN1     ((uint8_t)2)
+#define FRAME_STEP_LEN2     ((uint8_t)3)
+#define FRAME_STEP_TYPE     ((uint8_t)4)
 #define FRAME_STEP_DATA     ((uint8_t)5)
-#define FRAME_STEP_CRC1     ((uint8_t)6)
-#define FRAME_STEP_CRC2     ((uint8_t)7)
-#define FRAME_STEP_FRAME    ((uint8_t)8)
-#define FRAME_STEP_END    ((uint8_t)9)
 
 LightStream::LightStream(std::shared_ptr<IFrame> upper)
     :
@@ -62,16 +58,11 @@ void LightStream::Check(size_t nread)
                     // when step == 1, dog found too, we have a frame
                     frame.step++;
                 }
-                else if (frame.step == FRAME_STEP_TYPE)
+                else if (frame.step == FRAME_STEP_LEN1)
                 {
                     // we calculating crc from whole of data except start bytes
                     // so we store current position 
                     frame.buffer = &buff[index];
-                    frame.msg_type = buff[index];
-                    frame.step++;
-                }
-                else if (frame.step == FRAME_STEP_LEN1)
-                {
                     frame.msg_len = buff[index];
                     frame.step++;
                 }
@@ -81,6 +72,11 @@ void LightStream::Check(size_t nread)
                     frame.length = frame.msg_len;
                     // add crc length to msg_len
                     frame.msg_len += 2;
+                    frame.step++;
+                }
+                else if (frame.step == FRAME_STEP_TYPE)
+                {
+                    frame.msg_type = buff[index];
                     frame.step++;
                     // when loop break we need to increase index manually
                     index++;
@@ -182,8 +178,8 @@ void LightStream::InitFrame()
 
 void LightStream::FrameHeader(FrameType type, size_t dsize)
 {
-	wbuff.ptr[2] = (uint8_t)type;
-	memcpy(wbuff.ptr + 3, &dsize, 2);
+	memcpy(wbuff.ptr + 2, &dsize, 2);
+	wbuff.ptr[4] = (uint8_t)type;
 }
 
 void LightStream::PushDataToFrame(uint8_t* data, size_t size)
