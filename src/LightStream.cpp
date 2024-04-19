@@ -6,7 +6,7 @@
 #include "utils.h"
 #endif
 
-#define READ_BUFFER_SIZE	(1024 * 1)
+#define READ_BUFFER_SIZE	(1024 * 4+7)
 #define WRITE_BUFFER_SIZE	(1024 * 4+7)
 
 #define FRAME_STEP_CAT      ((uint8_t)0)
