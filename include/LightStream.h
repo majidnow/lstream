@@ -74,9 +74,23 @@ static void debug_loop()
 }
 #endif
 
-enum class FrameStatus:uint8_t
+enum class Status:uint8_t
 {
-	OK = 0, CRC_ERROR
+	OK = 0, 
+	CRC_ERROR,
+	STORAGE_ERROR,
+	SAME_VERSION,
+	NO_NEED_UPLOAD,
+
+	INVALID = 255
+};
+
+enum class CheckType:uint8_t {
+	FILE, UPDATE
+};
+
+enum class FileType :uint8_t {
+	FIRMWARE, BOOTLOADER
 };
 
 enum class FrameType :uint8_t
@@ -85,9 +99,7 @@ enum class FrameType :uint8_t
     GET_MEASUREMENT,
     GET_SETTINGS,
     UPLOAD,
-    UPDATE_FIRMWARE,
-    UPDATE_BOOTLOADER,
-    UPDATE_CONFIG,
+    UPDATE,
     MEASUREMENT,
     STATUS,
     SETTING,
@@ -97,6 +109,7 @@ enum class FrameType :uint8_t
     FAULT_REGISTER,
     GET_SCATTER,
     SCATTER,
+	CHECK,
 
     PONG = 0x1F// we using 3 high-bits of type field to show protocol version so we can support 32 types
 };
@@ -135,7 +148,7 @@ public:
 	uint8_t* buffer;
 	size_t length;
     FrameType type;
-    FrameStatus status;
+    Status status;
 private:
     uint8_t step, msg_type;
     uint16_t msg_len, first_piece_len, nread;

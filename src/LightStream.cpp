@@ -133,11 +133,11 @@ void LightStream::Check(size_t nread)
                 if (cal_crc == crc)
                 {
                     frame.buffer = temp_buff + 3;
-                    frame.status = FrameStatus::OK;
+                    frame.status = Status::OK;
                     frame.type = (FrameType)frame.msg_type;
                 }
                 else
-                    frame.status = FrameStatus::CRC_ERROR;
+                    frame.status = Status::CRC_ERROR;
 
                 upper->OnFrame(frame);
                 if (frame.first_piece_len > 0)
