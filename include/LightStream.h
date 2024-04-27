@@ -81,6 +81,7 @@ enum class Status:uint8_t
 	STORAGE_ERROR,
 	SAME_VERSION,
 	NO_NEED_UPLOAD,
+	FILE_NOT_FOUND,
 
 	INVALID = 255
 };
