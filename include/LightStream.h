@@ -11,6 +11,9 @@
 #ifdef FILE_ERROR
 #undef FILE_ERROR
 #endif
+#ifdef FILE_NOT_FOUND
+#undef FILE_NOT_FOUND
+#endif
 
 #define START_BYTE_CAT  0x41
 #define START_BYTE_DOG  0x24
@@ -77,32 +80,34 @@ static void debug_loop()
 enum class Status:uint8_t
 {
 	OK = 0, 
-	CRC_ERROR,
-	STORAGE_ERROR,
+	CRC_ERROR		= 1,
+	STORAGE_ERROR   = 2,
 	SAME_VERSION,
 	NO_NEED_UPLOAD,
 	FILE_NOT_FOUND,
+	FILE_READ_ERROR,
+	FILE_SIZE,
 
 	INVALID = 255
 };
 
 enum class CheckType:uint8_t {
-	FILE, UPDATE
+	FILE, UPDATE, DOWNLOAD
 };
 
 enum class FileType :uint8_t {
-	FIRMWARE, BOOTLOADER
+	FIRMWARE, BOOTLOADER, EVENTS
 };
 
 enum class FrameType :uint8_t
 {
     PING = 0x00,
-    GET_MEASUREMENT,
+    GET_MEASUREMENT		= 1,
     GET_SETTINGS,
     UPLOAD,
     UPDATE,
     MEASUREMENT,
-    STATUS,
+    STATUS				= 6,
     SETTING,
     GET_FAULT_LIST,
     FAULT_LIST,
@@ -110,7 +115,13 @@ enum class FrameType :uint8_t
     FAULT_REGISTER,
     GET_SCATTER,
     SCATTER,
-	CHECK,
+	CHECK				= 14,
+	GET_SIGNAL,
+	SIGNAL,
+	RESET,
+	SAVE_FILE,
+	DOWNLOAD			= 19,
+	FILE,
 
     PONG = 0x1F// we using 3 high-bits of type field to show protocol version so we can support 32 types
 };
@@ -158,6 +169,7 @@ private:
 class IFrame
 {
 public:
+	virtual ~IFrame(){};
     virtual void OnFrame(SFrame&) = 0;
 };
 
