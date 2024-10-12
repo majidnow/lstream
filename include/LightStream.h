@@ -11,6 +11,9 @@
 #ifdef FILE_ERROR
 #undef FILE_ERROR
 #endif
+#ifdef FILE_NOT_FOUND
+#undef FILE_NOT_FOUND
+#endif
 
 #define START_BYTE_CAT  0x41
 #define START_BYTE_DOG  0x24
@@ -111,6 +114,10 @@ enum class FrameType :uint8_t
     GET_SCATTER,
     SCATTER,
 	CHECK,
+	GET_SIGNAL,
+	SIGNAL,
+	RESET,
+	SAVE_FILE,
 
     PONG = 0x1F// we using 3 high-bits of type field to show protocol version so we can support 32 types
 };
@@ -158,6 +165,7 @@ private:
 class IFrame
 {
 public:
+	virtual ~IFrame(){};
     virtual void OnFrame(SFrame&) = 0;
 };
 
