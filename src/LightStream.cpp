@@ -6,6 +6,9 @@
 #include "utils.h"
 #endif
 
+#define START_BYTE_CAT  0x41
+#define START_BYTE_DOG  0x24
+
 #define READ_BUFFER_SIZE	(MAX_DATA_SIZE+7)
 #define WRITE_BUFFER_SIZE	(MAX_DATA_SIZE+7)
 
@@ -28,9 +31,14 @@ LightStream::LightStream(std::shared_ptr<IFrame> upper)
     //crcInit();
 }
 
-uint8_t* LightStream::Buffer()
+uint8_t* LightStream::ReadBuffer()
 {
 	return rbuffer + rposition;
+}
+
+uint8_t* LightStream::WriteBuffer()
+{
+	return wbuff.End();
 }
 
 size_t LightStream::Size()
