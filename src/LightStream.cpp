@@ -4,10 +4,15 @@
 #ifdef MCU
 #include "string.h"
 #include "utils.h"
+#else
+#include <iostream>
 #endif
 
-#define READ_BUFFER_SIZE	(1024 * 4+7)
-#define WRITE_BUFFER_SIZE	(1024 * 4+7)
+#define START_BYTE_CAT  0x41
+#define START_BYTE_DOG  0x24
+
+#define READ_BUFFER_SIZE	(MAX_DATA_SIZE+7)
+#define WRITE_BUFFER_SIZE	(MAX_DATA_SIZE+7)
 
 #define FRAME_STEP_CAT      ((uint8_t)0)
 #define FRAME_STEP_DOG      ((uint8_t)1)
@@ -155,7 +160,7 @@ void LightStream::Check(size_t nread)
         // the position need to set zero
         rposition = 0;
         // seeking frame data body started the so data will be turned to pieces
-        if (frame.step >= FRAME_STEP_TYPE)
+        if (frame.step >= FRAME_STEP_LEN1)
             frame.first_piece_len = frame.nread+(frame.step-2);
     }
 }
