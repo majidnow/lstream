@@ -8,15 +8,15 @@
 #ifndef FRAME_TYPE
 enum class FrameType :uint8_t
 {
-	PING = 0x00
+    PING	= 0x00
 };
 #endif
 #ifndef FRAME_STATUS
-enum class Status :uint8_t
+enum class Status:uint8_t
 {
-	OK = 0x00,
-	CRC_ERROR = 0x01,
-	INVALID = 0xFF
+	OK 				= 0x00,
+	CRC_ERROR		= 0x01,
+	INVALID 		= 0xFF
 };
 #endif
 
@@ -63,6 +63,7 @@ private:
 class IFrame
 {
 public:
+	virtual ~IFrame(){};
     virtual void OnFrame(SFrame&) = 0;
 };
 
@@ -70,7 +71,8 @@ class LightStream
 {
 public:
 	LightStream(std::shared_ptr<IFrame>);
-	uint8_t* Buffer();
+	uint8_t* ReadBuffer();
+	uint8_t* WriteBuffer();
 	size_t Size();
 	void Check(size_t);
 	void InitFrame();

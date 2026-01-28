@@ -33,9 +33,14 @@ LightStream::LightStream(std::shared_ptr<IFrame> upper)
     //crcInit();
 }
 
-uint8_t* LightStream::Buffer()
+uint8_t* LightStream::ReadBuffer()
 {
 	return rbuffer + rposition;
+}
+
+uint8_t* LightStream::WriteBuffer()
+{
+	return wbuff.End();
 }
 
 size_t LightStream::Size()
