@@ -25,7 +25,8 @@ class LSBuff
 public:
     LSBuff(size_t size)
 		:
-		position(0)
+		position(0),
+		size(size)
     {
     	ptr = new uint8_t[size];
     }
