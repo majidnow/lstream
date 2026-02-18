@@ -38,9 +38,13 @@ public:
 	{
 		return ptr;
 	}
-	size_t Size()
+	size_t Used()
 	{
 		return position;
+	}
+	size_t Size()
+	{
+		return size - position;
 	}
 	void Advance(size_t count)
 	{
@@ -48,7 +52,7 @@ public:
 	}
 private:
 	uint8_t *ptr;
-	size_t position;
+	size_t position, size;
 };
 
 class SFrame
