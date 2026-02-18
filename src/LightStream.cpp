@@ -38,9 +38,9 @@ uint8_t* LightStream::ReadBuffer()
 	return rbuffer + rposition;
 }
 
-uint8_t* LightStream::WriteBuffer()
+LSBuff& LightStream::WriteBuffer()
 {
-	return wbuff.End();
+	return wbuff;
 }
 
 size_t LightStream::Size()

@@ -37,13 +37,21 @@ public:
 	{
 		return ptr;
 	}
-	size_t Size()
+	size_t Used()
 	{
 		return position;
 	}
+	size_t Size()
+	{
+		return size - position;
+	}
+	void Advance(size_t count)
+	{
+		position += count;
+	}
 private:
 	uint8_t *ptr;
-	size_t position;
+	size_t position, size;
 };
 
 class SFrame
@@ -71,7 +79,7 @@ class LightStream
 public:
 	LightStream(std::shared_ptr<IFrame>);
 	uint8_t* ReadBuffer();
-	uint8_t* WriteBuffer();
+	LSBuff& WriteBuffer();
 	size_t Size();
 	void Check(size_t);
 	void InitFrame();
