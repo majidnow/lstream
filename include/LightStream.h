@@ -2,7 +2,6 @@
 
 #include <cstdint>
 #include <memory>
-//#include "logger.h"
 #include "ls_config.h"
 
 #ifndef FRAME_TYPE
