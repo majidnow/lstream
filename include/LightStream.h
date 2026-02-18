@@ -38,11 +38,11 @@ public:
 	{
 		return ptr;
 	}
-	size_t Used()
+	size_t Used() const
 	{
 		return position;
 	}
-	size_t Size()
+	size_t Size() const
 	{
 		return size - position;
 	}
