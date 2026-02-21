@@ -1,7 +1,7 @@
 #include "LightStream.h"
 #include "crc.h"
 
-#ifdef MCU
+#ifndef _WIN32
 #include "string.h"
 #include "utils.h"
 #else
