@@ -84,7 +84,7 @@ public:
 	size_t Size();
 	void Check(size_t);
 	void InitFrame();
-	void FrameHeader(FrameType, size_t);
+	void FrameHeader(FrameType, size_t = 0);
 	void PushDataToFrame(uint8_t*,size_t);
 	LSBuff* Frame();
 

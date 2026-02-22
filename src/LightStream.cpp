@@ -188,7 +188,6 @@ void LightStream::InitFrame()
 
 void LightStream::FrameHeader(FrameType type, size_t dsize)
 {
-	memcpy(wbuff.ptr + 2, &dsize, 2);
 	wbuff.ptr[4] = (uint8_t)type;
 }
 
@@ -200,6 +199,8 @@ void LightStream::PushDataToFrame(uint8_t* data, size_t size)
 
 LSBuff* LightStream::Frame()
 {
+	uint16_t size = wbuff.position-5;
+	memcpy(wbuff.ptr + 2, &size, 2);
 	uint16_t crc = crcFast(wbuff.ptr + 2, wbuff.position-2);
 	memcpy(wbuff.End(), &crc, 2);
 	wbuff.position += 2;
